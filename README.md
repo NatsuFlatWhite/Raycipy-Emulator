@@ -17,7 +17,8 @@ v1.325는 게임 서비스 약 2달이 지난 시점의 클라이언트입니다
 
 [클라이언트 다운로드](https://drive.google.com/file/d/1ZnlqomkJ58C7djYhDAkFgFsNB7RA_zRK/view?usp=sharing)
 
-`main.py`를 통해 서버를 실행하고, `Raycity.exe`로 게임에 접속하면 됩니다.
+`main.py`를 통해 서버를 실행하고, `Raycity.exe`로 게임에 접속하면 됩니다.<br>
+로그인 스테이지에서 사용하고 싶은 ID를 입력하고 서버에 접속하면 계정이 자동 생성됩니다. 생성된 계정은 `Raycity_db.json`에 저장됩니다.
 
 ## 기능
 
