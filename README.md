@@ -1,3 +1,9 @@
+<p align="center">
+  <b>한국어</b>
+  |
+  <a href="https://github.com/NatsuFlatWhite/Raycipy-Emulator/blob/main/Eng.md">English</a>
+</p>
+
 # Raycipy-Emulator
 
 레이시티 v1.325 (2007년 2월 8일 릴리즈) 클라이언트를 구동하기 위한 Python 기반 서버 에뮬레이터입니다.<br>
