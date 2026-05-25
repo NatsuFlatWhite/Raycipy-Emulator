@@ -23,6 +23,9 @@ It contains many systems that are different from the later versions of the game,
 
 This emulator was created for people who want to revisit or experience Raycity from that early period.
 
+Due to the age of the client, some compatibility issues may occur on modern Windows environments.  
+One currently known issue is that enabling the engine sound may cause distorted or crackling audio.
+
 ## How to Run
 
 [Download Client](https://drive.google.com/file/d/1ZnlqomkJ58C7djYhDAkFgFsNB7RA_zRK/view?usp=sharing)
