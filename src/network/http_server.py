@@ -4,11 +4,11 @@ import logging
 logger = logging.getLogger("HttpServer")
 
 
-def build_serverlist(channels: list[dict]) -> bytes:
+def build_serverlist(server_name: str, channels: list[dict]) -> bytes:
     lines = [
         "<?xml version='1.0' encoding='UTF-16'?>",
         "<server>",
-        '\t<server name="레이시티">',
+        f'\t<server name="{server_name}">',
     ]
     for ch in channels:
         name = ch["name"]
@@ -25,6 +25,10 @@ def build_serverlist(channels: list[dict]) -> bytes:
 
 CHANNELS = [
     {"name": "일반-1", "ip": "127.0.0.1", "port": 2180},
+]
+
+QA_CHANNELS = [
+    {"name": "QA-일반-1", "ip": "127.0.0.1", "port": 2180},
 ]
 
 
@@ -50,15 +54,14 @@ class HttpServerProtocol(asyncio.Protocol):
             method, path, *_ = first_line.split(" ")
             logger.info("HTTP %s %s", method, path)
 
-            if path.split("?", 1)[0].lower() == "/serverlist.xml":
-                body = build_serverlist(CHANNELS)
-                response = (
-                    "HTTP/1.0 200 OK\r\n"
-                    "Content-Type: text/xml; charset=utf-16\r\n"
-                    f"Content-Length: {len(body)}\r\n"
-                    "Connection: close\r\n"
-                    "\r\n"
-                ).encode() + body
+            request_path = path.split("?", 1)[0].lower()
+
+            if request_path == "/serverlist.xml":
+                body = build_serverlist("레이시티", CHANNELS)
+                response = self._ok_response(body)
+            elif request_path == "/qa/serverlist.xml":
+                body = build_serverlist("레이시티 QA", QA_CHANNELS)
+                response = self._ok_response(body)
             else:
                 response = b"HTTP/1.0 404 Not Found\r\nContent-Length: 0\r\n\r\n"
 
@@ -68,6 +71,16 @@ class HttpServerProtocol(asyncio.Protocol):
         finally:
             self.transport.close()
 
+    @staticmethod
+    def _ok_response(body: bytes) -> bytes:
+        return (
+            "HTTP/1.0 200 OK\r\n"
+            "Content-Type: text/xml; charset=utf-16\r\n"
+            f"Content-Length: {len(body)}\r\n"
+            "Connection: close\r\n"
+            "\r\n"
+        ).encode() + body
+
     def connection_lost(self, exc):
         pass
 
@@ -75,5 +88,9 @@ class HttpServerProtocol(asyncio.Protocol):
 async def start_http_server(host: str = "0.0.0.0", port: int = 80):
     loop = asyncio.get_running_loop()
     server = await loop.create_server(HttpServerProtocol, host, port)
-    logger.info("HTTP server listening on %s:%d (serving /serverlist.xml)", host, port)
+    logger.info(
+        "HTTP server listening on %s:%d (serving serverlist.xml)",
+        host,
+        port,
+    )
     return server
